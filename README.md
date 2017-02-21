@@ -4,11 +4,17 @@ PHP implementation of d3stryr-3stripes
 ## Step-by-step instructions:
 
 1) Click "Download ZIP"
+
 2) If you are on a Mac this will save the zip to the Download folder.
+
 3) Unzip the file you just download.
+
 4) Open the folder you just unzipped.
+
 5) Move the d3stryr-3stripes.php file to your home folder on your mac. The home folder is normally the folder with your username.
+
 6) Open up a terminal window.
+
 7) Type (or copy & paste) the following command below and then hit enter:
 
 ```
@@ -16,7 +22,9 @@ php -v
 ```
 
 8) If the output of the command shows you a number larger than 5.4 after PHP then you are good to go. For the really dumb sneaker heads: 5.5 is larger than 5.4
+
 9) However, if you are running a version less than 5.4 (say 5.3) then I'm not sure if it will or will not work. But you can proceed and pray.
+
 10) Type (or copy & paste) the following command below into the terminal window and then hit enter:
 
 ```
