@@ -51,30 +51,32 @@ php -S 127.0.0.1:8000
 
 _If you run into issues with captcha loading and you are CERTAIN the site-key is correct then your issue is likely with the domain that you are using: dev.adidas.*_
 For step #10 consider using a variation of dev.adidas.com in the command if you are from a different locale:
+<pre>
 Locale:
-  AT : dev.adidas.at
-  AU : dev.adidas.com.au
-  BE : dev.adidas.be
-  BR : dev.adidas.com.br
-  CA : dev.adidas.ca
-  CL : dev.adidas.cl
-  CO : dev.adidas.co
-  CZ : dev.adidas.cz
-  DE : dev.adidas.de
-  DK : dev.adidas.dk
-  ES : dev.adidas.es
-  FI : dev.adidas.fi
-  FR : dev.adidas.fr
-  IE : dev.adidas.ie
-  IT : dev.adidas.it
-  MX : dev.adidas.mx
-  NL : dev.adidas.nl
-  NZ : dev.adidas.co.nz
-  PL : dev.adidas.pl
-  RU : dev.adidas.ru
-  SE : dev.adidas.se
-  SK : dev.adidas.sk
-  GB : dev.adidas.co.uk
+   AT : dev.adidas.at
+   AU : dev.adidas.com.au
+   BE : dev.adidas.be
+   BR : dev.adidas.com.br
+   CA : dev.adidas.ca
+   CL : dev.adidas.cl
+   CO : dev.adidas.co
+   CZ : dev.adidas.cz
+   DE : dev.adidas.de
+   DK : dev.adidas.dk
+   ES : dev.adidas.es
+   FI : dev.adidas.fi
+   FR : dev.adidas.fr
+   IE : dev.adidas.ie
+   IT : dev.adidas.it
+   MX : dev.adidas.mx
+   NL : dev.adidas.nl
+   NZ : dev.adidas.co.nz
+   PL : dev.adidas.pl
+   RU : dev.adidas.ru
+   SE : dev.adidas.se
+   SK : dev.adidas.sk
+   GB : dev.adidas.co.uk
+</pre>
 
 You would then have to use the same local in step #15
 For instance for UK:
