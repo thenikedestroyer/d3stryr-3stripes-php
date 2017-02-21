@@ -38,6 +38,7 @@ DONE
 ```
 
 12) Step #10 only has to be done once and never again if you enter your password in correctly.
+
 13) Type (or copy & paste) the following command below into the terminal window and then hit enter:
 
 ```
@@ -45,8 +46,11 @@ php -S 127.0.0.1:8000
 ```
 
 14) Now open a browser window and navigate to:
+
 15) http://dev.adidas.com:8000/d3stryr-3stripes.php
+
 16) When you are done. Just close the terminal window.
+
 17) If you want to run the script again just follow from steps 13.
 
 _If you run into issues with captcha loading and you are CERTAIN the site-key is correct then your issue is likely with the domain that you are using: dev.adidas.*_
