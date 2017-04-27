@@ -1,3 +1,4 @@
+# No plans to update anything - April 26, 2017
 # d3stryr-3stripes-php
 PHP implementation of d3stryr-3stripes
 # Usage (with local captcha support):
