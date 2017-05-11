@@ -1,9 +1,26 @@
+<?php session_start(); $debug=False; set_time_limit(0); ?>
+<?php
+  if (!isset($_SESSION["captchaTokens"]))
+  {
+    $_SESSION["captchaTokens"]=[];
+  }
+  if (!isset($_SESSION["previousCaptchaTokens"]))
+  {
+    $_SESSION["previousCaptchaTokens"]="";
+  }
+  foreach ($_SESSION["captchaTokens"] as $harvestedTokens)
+  {
+     $age=time()-$harvestedTokens["created"];
+     if ($age > 120)
+     {
+        array_shift($_SESSION["captchaTokens"]);
+     }
+  }
+?>
 <html>
   <head>
   <meta charset="UTF-8">
   <?php
-    $debug=False;
-    set_time_limit(0);
     $actionURL="/d3stryr-3stripes.php";
   ?>
   <title>d3stryr 3stripes</title>
@@ -34,7 +51,7 @@
     function checkCookie() {
 
         if (d3stripesSku == "") {
-          setCookie("d3stripesSku", "CP9654", 365);
+          setCookie("d3stripesSku", "BB2911", 365);
         }
 
 //      if (d3stripesDuplicate == "") {
@@ -47,7 +64,7 @@
 
         var d3stripesSku = getCookie("d3stripesSku");
         if (d3stripesSku == "") {
-          setCookie("d3stripesSku", "CP9654", 365);
+          setCookie("d3stripesSku", "BB2911", 365);
         }
 
 //      var d3stripesDuplicate = getCookie("d3stripesDuplicate");
@@ -72,7 +89,7 @@
 
         var d3stripesLocale = getCookie("d3stripesLocale");
         if (d3stripesLocale == "") {
-          setCookie("d3stripesLocale", "FR", 365);
+          setCookie("d3stripesLocale", "US", 365);
         }
 
         var d3stripesLocaleDefault = getCookie("d3stripesLocaleDefault");
@@ -92,11 +109,11 @@
 
         var d3stripesClientId = getCookie("d3stripesClientId");
         if (d3stripesClientId == "") {
-          setCookie("d3stripesClientId", "2904a24b-e4b4-4ef7-89a4-2ebd2d175dde", 365);
+          setCookie("d3stripesClientId", "provide-a-valid-client-id-please", 365);
         }
         var d3stripesSiteKey = getCookie("d3stripesSiteKey");
         if (d3stripesSiteKey == "") {
-          setCookie("d3stripesSiteKey", "6LeOnCkTAAAAAK72JqRneJQ2V7GvQvvgzsVr-6kR", 365);
+          setCookie("d3stripesSiteKey", "6Lf3NxoUAAAAAFdi90UqD0TaZSHCgINayoZnM69F", 365);
         }
     }
   </script>
@@ -323,6 +340,16 @@
       global $sizes;
       global $readableSizes;
       global $actionURL;
+
+      foreach ($_SESSION["captchaTokens"] as $harvestedTokens)
+      {
+         $age=time()-$harvestedTokens["created"];
+         if ($age > 120)
+         {
+            array_shift($_SESSION["captchaTokens"]);
+         }
+      }
+
       $cartURL=str_replace("http://","https://",$atcURL);
       $cartURL=str_replace("Cart-MiniAddProduct","Cart-Show",$cartURL);
 
@@ -353,7 +380,7 @@
       echo"                <input type='hidden' value='" . $locale . "' name='locale' id='locale'/>"."\n";
       echo"                <input type='hidden' value='" . $duplicate . "' name='duplicate' id='duplicate'/>"."\n";
       echo"                <input type='hidden' value='loadInventoryPage' name='gotoPage' id='gotoPage'/>"."\n";
-      echo"                <input type='submit' value='Refresh Inventory' name='submit' id='submit'/>"."\n";
+      echo"                <input type='submit' value='Refresh Inventory/Token' name='submit' id='submit'/>"."\n";
       echo"              </td>"."\n";
       echo"            </form>"."\n";
       echo"              <td>"."\n";
@@ -399,24 +426,68 @@
       echo"            </td>"."\n";
       echo"            <td valign='top'>"."\n";
       echo"              <fieldset>"."\n";
-      echo"                <h2>Current g-captcha Response<br>"."\n";
-                           if ( (isset($_POST['g-recaptcha-response'])) && (strlen($_POST['g-recaptcha-response'])>0) )
+                           if (sizeof($_SESSION["captchaTokens"]) > 0)
                            {
-                             $gcaptcha=$_POST['g-recaptcha-response'];
+      echo"                <h2>Harvested g-captcha Tokens: <font color='green'>".sizeof($_SESSION["captchaTokens"])."</font><br>"."\n";
+                           }
+                           else
+                           {
+      echo"                <h2>Harvested g-captcha Tokens: <font color='red'>".sizeof($_SESSION["captchaTokens"])."</font><br>"."\n";
+                           }
+                           if ( @sizeof($_SESSION["captchaTokens"]) > 0 )
+                           {
+                             $gcaptcha=$_SESSION["captchaTokens"][0]["token"];
                            }
                            else
                            {
                              $gcaptcha="";
                            }
-      echo"                  <textarea name='gcaptcha' id='gcaptcha' cols='50' rows='2'>" . $gcaptcha . "</textarea>"."\n";
+//    echo"                  <textarea name='gcaptcha' id='gcaptcha' cols='50' rows='5'>" . $gcaptcha . "</textarea>"."\n";
       echo"                  <br>"."\n";
-                           if ($timer)
-                           {
-      echo"                  Token will expire at <font color='red'><script>document.write(getCookie('captchaExpiration'));</script></font>"."\n";
-      echo"                  <br>You can only use it for a single ATC click."."\n";
-                           }
       echo"                </h2>"."\n";
-      echo"                <h2>Link to copy for injection<br>"."\n";
+
+
+      echo"<pre>"."\n";
+      echo"Current: ".substr($gcaptcha,-23)."\n";
+      foreach ($_SESSION["captchaTokens"] as $harvestedTokens)
+      {
+         $age=time()-$harvestedTokens["created"];
+         echo "Token  : ...".substr($harvestedTokens["token"],-20)." "."Age: ".str_pad($age, 3,' ', STR_PAD_LEFT)." seconds \n";
+      }
+      echo"</pre>"."\n";
+      echo"              <form id='clearGCaptchaTokens' action='/d3stryr-3stripes-tokens.php' method='post'>"."\n";
+      echo"                <input type='hidden' value='" . $sku . "' name='sku' id='sku'/>"."\n";
+      echo"                <input type='hidden' value='" . $clientId . "' name='clientId' id='clientId'/>"."\n";
+      echo"                <input type='hidden' value='" . $sitekey . "' name='sitekey' id='sitekey'/>"."\n";
+      echo"                <input type='hidden' value='" . $locale . "' name='locale' id='locale'/>"."\n";
+      echo"                <input type='hidden' value='" . $duplicate . "' name='duplicate' id='duplicate'/>"."\n";
+      echo"                <input type='hidden' value='loadInventoryPage' name='gotoPage' id='gotoPage'/>"."\n";
+      echo"                <input type='hidden' value='clearGCaptchaTokens' name='tokenAction' id='tokenAction'/>"."\n";
+      echo"                <input type='submit' value='Clear Captcha Tokens' name='submit' id='submit'/>"."\n";
+      echo"              </form>"."\n";
+      echo"              <form id='shiftCaptchaToken' action='/d3stryr-3stripes-tokens.php' method='post'>"."\n";
+      echo"                <input type='hidden' value='" . $sku . "' name='sku' id='sku'/>"."\n";
+      echo"                <input type='hidden' value='" . $clientId . "' name='clientId' id='clientId'/>"."\n";
+      echo"                <input type='hidden' value='" . $sitekey . "' name='sitekey' id='sitekey'/>"."\n";
+      echo"                <input type='hidden' value='" . $locale . "' name='locale' id='locale'/>"."\n";
+      echo"                <input type='hidden' value='" . $duplicate . "' name='duplicate' id='duplicate'/>"."\n";
+      echo"                <input type='hidden' value='loadInventoryPage' name='gotoPage' id='gotoPage'/>"."\n";
+      echo"                <input type='hidden' value='shiftCaptchaToken' name='tokenAction' id='tokenAction'/>"."\n";
+      echo"                <input type='submit' value='Delete Oldest Token' name='submit' id='submit'/>"."\n";
+      echo"              </form>"."\n";
+      echo"              <form id='refreshInventoryPage' action='/d3stryr-3stripes-tokens.php' method='post'>"."\n";
+      echo"                <input type='hidden' value='" . $sku . "' name='sku' id='sku'/>"."\n";
+      echo"                <input type='hidden' value='" . $clientId . "' name='clientId' id='clientId'/>"."\n";
+      echo"                <input type='hidden' value='" . $sitekey . "' name='sitekey' id='sitekey'/>"."\n";
+      echo"                <input type='hidden' value='" . $locale . "' name='locale' id='locale'/>"."\n";
+      echo"                <input type='hidden' value='" . $duplicate . "' name='duplicate' id='duplicate'/>"."\n";
+      echo"                <input type='hidden' value='loadInventoryPage' name='gotoPage' id='gotoPage'/>"."\n";
+      echo"                <input type='submit' value='Refresh Inventory/Token' name='submit' id='submit'/>"."\n";
+      echo"              </form>"."\n";
+      echo"              <pre>"."\n";
+      echo"Tokens > 120 seconds are auto-deleted."."\n";
+      echo"              </pre>"."\n";
+      echo"                <h2>Content to copy for injection<br>"."\n";
       echo"                  <textarea name='inject' id='inject' cols='50' rows='5'></textarea>"."\n";
       echo"                  <br>"."\n";
       echo"                </h2>"."\n";
@@ -702,7 +773,15 @@
 
       echo'      <script>
                   $("form#notify").submit(function(event) {
-                    $("textarea#gcaptcha").val("Token used. Solve another CAPTCHA");
+      $.ajax({
+        url: "d3stryr-3stripes-tokens.php",
+        data: {
+          "tokenAction":"shiftCaptchaToken",
+          "gotoPage":"loadInventoryPage"
+        },
+        method: "POST"
+      });
+
                   });
                  </script>';
 
@@ -1073,6 +1152,18 @@
         </tr>
       </table>
     <?php endif; ?>
+    <?php
+      if ( (isset($_POST['tokenAction'])) && (@$_POST['tokenAction'] == 'clearGCaptchaTokens'))
+      {
+        $_SESSION["captchaTokens"]=[];
+      }
+    ?>
+    <?php
+      if ( (isset($_POST['tokenAction'])) && (@$_POST['tokenAction'] == 'shiftCaptchaToken'))
+      {
+        array_shift($_SESSION["captchaTokens"]);
+      }
+    ?>
     <?php if ( (isset($_POST['gotoPage'])) && (@$_POST['gotoPage'] == 'loadInventoryPage')): ?>
 
       <?php
@@ -1269,6 +1360,14 @@
 
     <?php elseif ( (isset($_POST['gotoPage'])) && (@$_POST['gotoPage'] == 'setGCaptchaTokenPage')): ?>
       <?php
+        if ($_POST['g-recaptcha-response'] != $_SESSION["previousCaptchaTokens"])
+        {
+          array_push($_SESSION["captchaTokens"],["token"=>$_POST['g-recaptcha-response'],"created"=>time()]);
+        }
+        if (sizeof($_SESSION["captchaTokens"]) > 0)
+        {
+          $gcaptcha=$_SESSION["captchaTokens"][0]["token"];
+        }
 
         $gcaptcha=$_POST['g-recaptcha-response'];
         $sku=$_COOKIE['d3stripesSku'];
@@ -1529,51 +1628,12 @@
       </form>
       <fieldset>
         <table width="100%">
-          <tr>
-            <td id="headers">
-              <p>Yeezys SKUs</p>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <p>CP9654 (Yeezy V2 White/CBlack/Red)</p><br>
-            </td>
-          </tr>
-          <tr>
             <td id="headers">
               <p>Notes<p>
             <td>
           </tr>
           <tr>
             <td>
-              <p>Keys : AU</p><pre>
-AU sitekey  : 6Lf33BMUAAAAAFsW3VfZE7gVvtPINQSUnKUt_cS6 (Yeezy V2 Black/Red)
-AU clientId : 793264aa-fbaa-476e-809f-554cb4f7c23c (Yeezy V2 Black/Red)
-AU duplicate: AARMFK (Yeezy V2 Black/Red)
-
-AU sitekey  : 6LfmqykTAAAAAPkpAt5TNBSeZl81VlbRl7pZpM9m (Last working)
-AU clientId : 75e396c6-5589-425b-be03-774c21a74702 (Last working)</pre>
-              <p>Keys : EU</p><pre>
-EU sitekey  : 6Lc93RMUAAAAAPMKucaHJk3zfPYxdCCUOgtYqU7J (Yeezy V2 Black/Red)
-EU clientId : 2d10d8ab-445f-405b-9275-a92a24a57e9d (Yeezy V2 Black/Red)
-EU duplicate: AARMFK (Yeezy V2 Black/Red)
-
-EU sitekey  : 6LeOnCkTAAAAAK72JqRneJQ2V7GvQvvgzsVr-6kR (Last working)
-EU clientId : 2904a24b-e4b4-4ef7-89a4-2ebd2d175dde (Last working)</pre>
-              <p>Keys : CA</p><pre>
-CA sitekey  : 6Ldr2xMUAAAAAPxKL_CUa8aGs5BssM13VONWgAlY (Yeezy V2 Black/Red)
-CA clientId : a4f26539-f338-434b-babb-92ad61c4e3f7 (Yeezy V2 Black/Red)
-CA duplicate: AARMFK (Yeezy V2 Black/Red)
-
-CA sitekey  : ? (Last working)
-CA clientId : ? (Last working)</pre>
-              <p>Keys : US</p><pre>
-US sitekey  : 6Lcc2xMUAAAAAJ4p4jZsjd6XHUoKNqPqR7Prn4H1 (Yeezy V2 Black/Red)
-US clientId : e0710322-14c8-4dbc-872a-a771d400367c (Yeezy V2 Black/Red)
-US duplicate: AARMFK (Yeezy V2 Black/Red)
-
-US sitekey  : 6Le4AQgUAAAAAABhHEq7RWQNJwGR_M-6Jni9tgtA (Last working)
-US clientId : bb1e6193-3c86-481e-a440-0d818af5f3c8 (Last working)</pre>
               <p>Drag bookmarklet links to your bookmark bar.</p>
               <p>Bookmarklet for <a href='
 javascript:(function(){
