@@ -455,7 +455,7 @@
          echo "Token  : ...".substr($harvestedTokens["token"],-20)." "."Age: ".str_pad($age, 3,' ', STR_PAD_LEFT)." seconds \n";
       }
       echo"</pre>"."\n";
-      echo"              <form id='clearGCaptchaTokens' action='/d3stryr-3stripes-tokens.php' method='post'>"."\n";
+      echo"              <form id='clearGCaptchaTokens' action='" . $actionURL . "' method='post'>"."\n";
       echo"                <input type='hidden' value='" . $sku . "' name='sku' id='sku'/>"."\n";
       echo"                <input type='hidden' value='" . $clientId . "' name='clientId' id='clientId'/>"."\n";
       echo"                <input type='hidden' value='" . $sitekey . "' name='sitekey' id='sitekey'/>"."\n";
@@ -465,7 +465,7 @@
       echo"                <input type='hidden' value='clearGCaptchaTokens' name='tokenAction' id='tokenAction'/>"."\n";
       echo"                <input type='submit' value='Clear Captcha Tokens' name='submit' id='submit'/>"."\n";
       echo"              </form>"."\n";
-      echo"              <form id='shiftCaptchaToken' action='/d3stryr-3stripes-tokens.php' method='post'>"."\n";
+      echo"              <form id='shiftCaptchaToken' action='" . $actionURL . "' method='post'>"."\n";
       echo"                <input type='hidden' value='" . $sku . "' name='sku' id='sku'/>"."\n";
       echo"                <input type='hidden' value='" . $clientId . "' name='clientId' id='clientId'/>"."\n";
       echo"                <input type='hidden' value='" . $sitekey . "' name='sitekey' id='sitekey'/>"."\n";
@@ -475,7 +475,7 @@
       echo"                <input type='hidden' value='shiftCaptchaToken' name='tokenAction' id='tokenAction'/>"."\n";
       echo"                <input type='submit' value='Delete Oldest Token' name='submit' id='submit'/>"."\n";
       echo"              </form>"."\n";
-      echo"              <form id='refreshInventoryPage' action='/d3stryr-3stripes-tokens.php' method='post'>"."\n";
+      echo"              <form id='refreshInventoryPage' action='" . $actionURL . "' method='post'>"."\n";
       echo"                <input type='hidden' value='" . $sku . "' name='sku' id='sku'/>"."\n";
       echo"                <input type='hidden' value='" . $clientId . "' name='clientId' id='clientId'/>"."\n";
       echo"                <input type='hidden' value='" . $sitekey . "' name='sitekey' id='sitekey'/>"."\n";
@@ -774,7 +774,7 @@
       echo'      <script>
                   $("form#notify").submit(function(event) {
       $.ajax({
-        url: "d3stryr-3stripes-tokens.php",
+        url: "' . $actionURL . '",
         data: {
           "tokenAction":"shiftCaptchaToken",
           "gotoPage":"loadInventoryPage"
