@@ -1,3 +1,5 @@
+# I ain't updating shit. - TheNikeDestroyer
+
 # d3stryr-3stripes-php
 PHP implementation of d3stryr-3stripes
 # Usage (with local captcha support):
