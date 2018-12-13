@@ -1,4 +1,4 @@
-# I ain't updating shit. - TheNikeDestroyer
+# I ain't updating. - TheNikeDestroyer
 
 # d3stryr-3stripes-php
 PHP implementation of d3stryr-3stripes
@@ -132,7 +132,7 @@ echo '127.0.0.1 dev.adidas.sk'     | sudo tee -a /etc/hosts > /dev/null && echo 
 echo '127.0.0.1 dev.adidas.co.uk'  | sudo tee -a /etc/hosts > /dev/null && echo DONE dev.adidas.co.uk
 ```
 # Please direct all questions/problems about the script to the following thread:
-# [http://bit.ly/FuckNikeTalkFAQ](http://bit.ly/FuckNikeTalkFAQ)
+# [http://bit.ly/NikeTalkFAQ](http://bit.ly/FuckNikeTalkFAQ)
 
 # If no one answers your question in the above [thread](http://bit.ly/FuckNikeTalkFAQ) after reposting your question 5 or more times then see if the forum below has your answers:
 # [http://bit.ly/d3stripesQA](http://bit.ly/d3stripesQA)
